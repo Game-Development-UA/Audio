@@ -5,7 +5,7 @@ using UnityEngine.SceneManagement;
 
 public class EndScene : MonoBehaviour
 {
-    Collider2D col;
+    private Collider2D col;
     public string scene;
 
     // Update is called once per frame

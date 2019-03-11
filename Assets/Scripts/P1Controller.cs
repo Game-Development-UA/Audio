@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class P1Controller : MonoBehaviour
 {
@@ -11,12 +12,16 @@ public class P1Controller : MonoBehaviour
     public float speed;
     public float life;
     public Rigidbody2D charac;
+    public int MaxJumps;
+    int JumpCount = 0;
+    public string scene;
+
 
 
     // Start is called before the first frame update
     void Start()
     {
-
+        JumpCount = MaxJumps;
     }
 
     // Update is called once per frame
@@ -25,16 +30,46 @@ public class P1Controller : MonoBehaviour
         horizonatal_mvmt = Input.GetAxis("Horizontal");
         //vertical = Input.GetAxis("Vertical");
         charac.velocity = new Vector2(speed * horizonatal_mvmt, charac.velocity.y);
-
         if (Input.GetButtonDown("Jump"))
         {
-            if (charac.position.y > 6f)
-                charac.position = charac.position;
-            else
-                charac.AddForce(new Vector2(0f, jump), ForceMode2D.Impulse);
+            if( JumpCount > 0)
+            {
+                Jump();
+            }
+            
         }
-
     }
+    public void Jump()
+    { 
+        
+        //if (charac.position.y > 6f)
+        //{
+            //charac.position = charac.position;
+            //JumpCount -= 1;
+            
+        //}
+        //else
+        //{
+        charac.AddForce(new Vector2(0f, jump), ForceMode2D.Impulse);
+        JumpCount -= 1;
+
+        //}
+    }
+
+    void OnCollisionEnter2D(Collision2D col)
+    {
+        if (col.gameObject.tag == "Ground")
+        {
+            JumpCount = MaxJumps;
+        }
+    }
+
+    public void Load(string levelName)
+    {
+        SceneManager.LoadScene(levelName);
+    }
+
+
     void OnTriggerEnter2D(Collider2D col)
     {
         SpeedPowerup moreSpeed = col.gameObject.GetComponent<SpeedPowerup>();
@@ -50,7 +85,9 @@ public class P1Controller : MonoBehaviour
             if (life == 0 || life - lessLife.lifeDecrease<=0)
             {
                 Destroy(charac.gameObject);
+                Load(scene);
                 //end game
+                
             }
             else
             {

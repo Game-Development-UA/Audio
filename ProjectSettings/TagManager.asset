@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Powerup
   - Hazard
+  - Ground
   layers:
   - Default
   - TransparentFX
