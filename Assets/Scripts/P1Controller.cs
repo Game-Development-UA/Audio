@@ -15,6 +15,9 @@ public class P1Controller : MonoBehaviour
     public int MaxJumps;
     int JumpCount = 0;
     public string scene;
+    private SpriteRenderer SR;
+
+
 
 
 
@@ -30,6 +33,20 @@ public class P1Controller : MonoBehaviour
         horizonatal_mvmt = Input.GetAxis("Horizontal");
         //vertical = Input.GetAxis("Vertical");
         charac.velocity = new Vector2(speed * horizonatal_mvmt, charac.velocity.y);
+
+        GameObject appearance = GameObject.Find("Player/Appearance");//Grabs child object of player
+        SR = appearance.GetComponent<SpriteRenderer>(); //Grabes sprite renderer of apparance
+
+        //Acitvates flipx based on button pressed.
+        if (Input.GetAxis("Horizontal") < 0)
+        {
+            SR.flipX = true;
+        }
+        if (Input.GetAxis("Horizontal") > 0)
+        {
+            SR.flipX = false;
+        }
+
         if (Input.GetButtonDown("Jump"))
         {
             if( JumpCount > 0)
@@ -41,19 +58,8 @@ public class P1Controller : MonoBehaviour
     }
     public void Jump()
     { 
-        
-        //if (charac.position.y > 6f)
-        //{
-            //charac.position = charac.position;
-            //JumpCount -= 1;
-            
-        //}
-        //else
-        //{
         charac.AddForce(new Vector2(0f, jump), ForceMode2D.Impulse);
-        JumpCount -= 1;
-
-        //}
+        JumpCount -= 1;      
     }
 
     void OnCollisionEnter2D(Collision2D col)
